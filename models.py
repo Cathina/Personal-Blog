@@ -1,21 +1,32 @@
 from django.db import models
 
+from django.contrib.auth.models import User
+#导入内建User模型
+
+from django.utils import timezone
+#timezone 用于处理时间相关事务
+
 # Create your models here.
 
-class Article(models.Model):
-    title = models.CharField(max_length = 50)  #博客题目
-    category = models.CharField(max_length = 50, blank = True)  #博客标签
-    author = models.CharField(max_length = 20)  #博客作者
-    date_time = models.DateTimeField(auto_now_add = True)  #博客日期
-    content = models.TextField(blank = True, null = True)  #博客文章正文
+# 博客文章数据模型
+class ArticlePost(models.Model):
+    # 文章作者。参数 on_delete 用于指定数据删除的方式
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
 
-    def __unicode__(self) :  #函数article对象要怎么表示自己：用title字段表示
+    # 文章标题。models.CharField 为字符串字段，用于保存较短的字符串，比如标题
+    title = models.CharField(max_length=100)
+
+    # 文章正文。保存大量文本使用 TextField
+    body = models.TextField()
+
+    # 文章创建时间。参数 default=timezone.now 指定其在创建数据时将默认写入当前的时间
+    created = models.DateTimeField(default=timezone.now)
+
+    # 文章更新时间。参数 auto_now=True 指定每次数据更新时自动写入当前时间
+    updated = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ('-created',)
+
+    def __str__(self):
         return self.title
-
-    class Meta:  #按时间下降降序
-        ordering = ['-date_time']
-
-
-#CharField 存储字符串
-#TextField 存储大量文本
-#DateTimeField 存储时间 auto_now_add = True自动设置对象增加时间
