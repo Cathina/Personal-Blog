@@ -4,8 +4,6 @@ from .models import ArticlePost #引入文章模型
 class ArticlePostForm(forms.ModelForm):
 	class Meta:
 		model = ArticlePost
-		fields = ('title','body')
-
-
+		fields = ('title','body','tags','avatar')
 
 
