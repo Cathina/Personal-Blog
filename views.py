@@ -20,6 +20,8 @@ from django.db.models import Q
 # 引入 Q 对象
 
 from comment.models import Comment
+# 引入评论表单
+from comment.forms import CommentForm
 
 def article_list(request):
 	search = request.GET.get('search')
@@ -77,6 +79,7 @@ def article_detail(request, id):
 
 	comments = Comment.objects.filter(article=id)
 	#取出文章评论
+	comment_form = CommentForm()
 
 	tags = article.tags
 
@@ -98,6 +101,7 @@ def article_detail(request, id):
 				'toc':md.toc, 
 				'comments':comments,
 				'avatar':avatar,
+				'comment_form':comment_form,
 				}
 	#取出context
 
